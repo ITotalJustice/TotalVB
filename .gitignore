@@ -51,8 +51,17 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-
 # my ignore
 .vscode
 build
 roms/
+
+# msvc
+TotalVB/.vs
+TotalVB/Debug/
+TotalVB/Release
+TotalVB/x64/
+TotalVB/packages/
+TotalVB/TotalVB/Debug
+TotalVB/TotalVB/Release
+TotalVB/TotalVB/x64
