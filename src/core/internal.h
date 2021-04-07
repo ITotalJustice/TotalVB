@@ -27,8 +27,14 @@ extern "C" {
 #endif // VB_DEBUG
 
 
-void VB_mmio_write_32(struct VB_Core* vb, uint32_t addr, uint32_t value);
 
+uint8_t VB_bus_read_8(struct VB_Core* vb, uint32_t addr);
+uint16_t VB_bus_read_16(struct VB_Core* vb, uint32_t addr);
+uint32_t VB_bus_read_32(struct VB_Core* vb, uint32_t addr);
+
+void VB_bus_write_8(struct VB_Core* vb, uint32_t addr, uint8_t value);
+void VB_bus_write_16(struct VB_Core* vb, uint32_t addr, uint16_t value);
+void VB_bus_write_32(struct VB_Core* vb, uint32_t addr, uint32_t value);
 
 #ifdef __cplusplus
 }

@@ -10,11 +10,13 @@ extern "C" {
 #include <stdint.h>
 
 
-enum { VB_ROM_HEADER_OFFSET_0 = 0x0FFDE0 };
-enum { VB_ROM_HEADER_OFFSET_1 = 0x1FFDE0 };
+enum { VB_ROM_HEADER_OFFSET_512kb = 0x07FDE0 };
+enum { VB_ROM_HEADER_OFFSET_1mb = 0x0FFDE0 };
+enum { VB_ROM_HEADER_OFFSET_2mb = 0x1FFDE0 };
+
 
 struct VB_RomHeader {
-    char title[13];
+    char title[14];
     uint8_t reserved[4];
     char maker_code[2];
     char game_code[4];
@@ -22,23 +24,24 @@ struct VB_RomHeader {
 };
 
 struct VB_RomTitle {
-    char title[14]; /* this is NULL terminated */
+    char title[15]; /* this is NULL terminated */
 };
 
-#define GAME_PAD_INTERRUPT  0xFFFFFE00
-#define TIMER_ZERO_INTERRUPT  0xFFFFFE10
-#define GAME_PAK_INTERRUPT  0xFFFFFE20
-#define COMMUNICATION_INTERRUPT  0xFFFFFE30
-#define VIP_INTERRUPT  0xFFFFFE40
-#define FLOATINT_POINT_EXCEPTION  0xFFFFFF60
-#define ZERO_DIVISION_EXCEPTION  0xFFFFFF80
-#define ILLEGAL_OPCODE_EXCEPTION  0xFFFFFF90
-// #define TRAP instruction (vector < 16)  0xFFFFFFA0
-// #define TRAP instruction (vector ≥ 16)  0xFFFFFFB0
-#define ADDRESS_TRAP  0xFFFFFFC0
-#define DUPLEXED_EXCEPTION  0xFFFFFFD0
-#define RESET  0xFFFFFFF0
-
+enum VB_ExceptionHandles {
+    GAME_PAD_INTERRUPT = 0xFE00,
+    TIMER_ZERO_INTERRUPT = 0xFE10,
+    GAME_PAK_INTERRUPT = 0xFE20,
+    COMMUNICATION_INTERRUPT = 0xFE30,
+    VIP_INTERRUPT = 0xFE40,
+    FLOATINT_POINT_EXCEPTION = 0xFF60,
+    ZERO_DIVISION_EXCEPTION = 0xFF80,
+    ILLEGAL_OPCODE_EXCEPTION = 0xFF90,
+    // TRAP instruction (vector < 16) = 0xFFA0,
+    // TRAP instruction (vector ≥ 16) = 0xFFB0,
+    ADDRESS_TRAP = 0xFFC0,
+    DUPLEXED_EXCEPTION = 0xFFD0,
+    RESET = 0xFFF0,
+};
 
 enum VB_RegisterType {
     ZERO_REGISTER = 0,
@@ -134,6 +137,7 @@ struct VB_Core {
 
     const uint8_t* rom;
     size_t rom_size;
+    uint32_t rom_mask;
 };
 
 

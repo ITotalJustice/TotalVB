@@ -19,6 +19,12 @@
     <Filter Include="Header Files\core">
       <UniqueIdentifier>{228ca8d0-9386-4dc2-ab1a-84623fe1e160}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\core\bus">
+      <UniqueIdentifier>{5be1cb22-3fc6-4ddd-8ba9-d8812a755ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\bus">
+      <UniqueIdentifier>{057ecb96-f4ec-465b-85fb-7ee417d6b6cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\core\internal.h">
@@ -30,16 +36,25 @@
     <ClInclude Include="..\..\src\core\vb.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\core\bus\bus.h">
+      <Filter>Header Files\core\bus</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\core\mmio.c">
-      <Filter>Source Files\core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\vb.c">
       <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\main.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\bus\bus.c">
+      <Filter>Source Files\core\bus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\bus\reads.c">
+      <Filter>Source Files\core\bus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\bus\writes.c">
+      <Filter>Source Files\core\bus</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

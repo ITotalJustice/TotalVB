@@ -12,7 +12,10 @@ dependencies = [
 source = files([
     # core
     'src/core/vb.c',
-    'src/core/mmio.c',
+    'src/core/cpu.c',
+    'src/core/bus/bus.c',
+    'src/core/bus/reads.c',
+    'src/core/bus/writes.c',
 
 
     # used for testing

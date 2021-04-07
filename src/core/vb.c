@@ -30,11 +30,19 @@ struct VB_RomHeader* VB_get_rom_header(const struct VB_Core* vb) {
 struct VB_RomHeader* VB_get_rom_header_from_data(const uint8_t* data, const size_t size) {
     // assert(size > VB_ROM_HEADER_OFFSET && "data to small!");
 
-    if (size > 0x100000) {
-        return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_1);
-    } else {
-        return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_0);
+    if (size <= (0x100000 / 2)) {
+        return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_512kb);
     }
+
+    if (size <= (0x100000)) {
+        return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_1mb);
+    }
+
+    if (size <= 0x200000) {
+        return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_2mb);
+    }
+
+    return NULL;
 }
 
 void VB_get_rom_title(const struct VB_Core* vb, struct VB_RomTitle* title) {

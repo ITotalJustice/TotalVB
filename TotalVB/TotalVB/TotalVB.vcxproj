@@ -143,12 +143,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\core\bus\bus.h" />
     <ClInclude Include="..\..\src\core\internal.h" />
     <ClInclude Include="..\..\src\core\types.h" />
     <ClInclude Include="..\..\src\core\vb.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\core\mmio.c" />
+    <ClCompile Include="..\..\src\core\bus\bus.c" />
+    <ClCompile Include="..\..\src\core\bus\reads.c" />
+    <ClCompile Include="..\..\src\core\bus\writes.c" />
     <ClCompile Include="..\..\src\core\vb.c" />
     <ClCompile Include="..\..\src\main.c" />
   </ItemGroup>
