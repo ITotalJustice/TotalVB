@@ -10,6 +10,8 @@ extern "C" {
 
 void VB_init(struct VB_Core* vb);
 
+void VB_step(struct VB_Core* vb);
+
 // struct VB_RomHeader
 bool VB_loadrom(struct VB_Core* vb, const uint8_t* data, size_t size);
 

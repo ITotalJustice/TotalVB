@@ -364,3 +364,8 @@ static void execute_16(struct VB_Core* vb) {
             break;
     }
 }
+
+
+void VB_cpu_run(struct VB_Core* vb) {
+    execute_16(vb);
+}

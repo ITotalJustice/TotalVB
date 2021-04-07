@@ -28,19 +28,9 @@ struct VB_RomHeader* VB_get_rom_header(const struct VB_Core* vb) {
 }
 
 struct VB_RomHeader* VB_get_rom_header_from_data(const uint8_t* data, const size_t size) {
-    // assert(size > VB_ROM_HEADER_OFFSET && "data to small!");
-
-    if (size <= (0x100000 / 2)) {
-        return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_512kb);
-    }
-
-    if (size <= (0x100000)) {
-        return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_1mb);
-    }
-
-    if (size <= 0x200000) {
-        return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_2mb);
-    }
+    if (size <= 0x080000) { return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_512kb); }
+    if (size <= 0x100000) { return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_1mb); }
+    if (size <= 0x200000) { return (struct VB_RomHeader*)(data + VB_ROM_HEADER_OFFSET_2mb); }
 
     return NULL;
 }
@@ -70,6 +60,15 @@ static void log_header(const struct VB_RomHeader* header) {
     VB_log("\n");
 }
 
+static uint32_t get_rom_mask(const size_t size) {
+    if (size == 0x080000) { return 0x07FFFF; }
+    if (size == 0x100000) { return 0x0FFFFF; }
+    if (size == 0x200000) { return 0x1FFFFF; }
+
+    assert(0 && "invalid rom-size for mask!");
+    return 0x1; // throw here
+}
+
 bool VB_loadrom(struct VB_Core* vb, const uint8_t* data, size_t size) {
     assert(vb && data && size);
 
@@ -78,6 +77,11 @@ bool VB_loadrom(struct VB_Core* vb, const uint8_t* data, size_t size) {
 
     vb->rom = data;
     vb->rom_size = size;
+    vb->rom_mask = get_rom_mask(size);
 
     return true;
+}
+
+void VB_step(struct VB_Core* vb) {
+    VB_cpu_run(vb);
 }

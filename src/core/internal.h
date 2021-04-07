@@ -27,6 +27,8 @@ extern "C" {
 #endif // VB_DEBUG
 
 
+void VB_cpu_run(struct VB_Core* vb);
+
 
 uint8_t VB_bus_read_8(struct VB_Core* vb, uint32_t addr);
 uint16_t VB_bus_read_16(struct VB_Core* vb, uint32_t addr);

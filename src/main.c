@@ -53,5 +53,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
+    VB_step(&CORE);
+
     return 0;
 }
