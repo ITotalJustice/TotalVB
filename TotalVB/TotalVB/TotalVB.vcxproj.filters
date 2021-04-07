@@ -56,5 +56,8 @@
     <ClCompile Include="..\..\src\core\bus\writes.c">
       <Filter>Source Files\core\bus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\cpu.c">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

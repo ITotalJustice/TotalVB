@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\src\core\bus\bus.c" />
     <ClCompile Include="..\..\src\core\bus\reads.c" />
     <ClCompile Include="..\..\src\core\bus\writes.c" />
+    <ClCompile Include="..\..\src\core\cpu.c" />
     <ClCompile Include="..\..\src\core\vb.c" />
     <ClCompile Include="..\..\src\main.c" />
   </ItemGroup>
