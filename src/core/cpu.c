@@ -3,9 +3,9 @@
 
 
 #define CPU vb->cpu
-
 #define REGISTERS CPU.registers
 #define REG_PC CPU.PC
+
 
 // FLAGS
 #define FLAG_Z CPU.PSW.Z
@@ -89,6 +89,7 @@ struct Format6 {
     uint8_t reg1;   // 5-bits
     int32_t disp;   // sign extended
 };
+
 
 static inline struct Format1 gen_format1(struct VB_Core* vb, uint16_t op) {
     const struct Format1 f = {
@@ -222,6 +223,38 @@ static inline void ADDI(struct VB_Core* vb, struct Format5 f) {
         /* va */ REGISTERS[f.reg1],
         /* vb */ imm
     );
+}
+
+
+// [Conditional Branch]
+static inline void BRANCH(struct VB_Core* vb, struct Format3 f) {
+    switch (f.cond) {
+        case 0x0: if (FLAG_OV) { goto take_branch; } break;
+        case 0x1: if (FLAG_CY) { goto take_branch; } break;
+        case 0x2: if (FLAG_Z) { goto take_branch; } break;
+        case 0x3: if (FLAG_CY || FLAG_Z) { goto take_branch; } break;
+        case 0x4: if (FLAG_S) { goto take_branch; } break;
+        case 0x5: if (true) { goto take_branch; } break;
+        case 0x6: if (FLAG_OV ^ FLAG_S) { goto take_branch; } break;
+        case 0x7: if ((FLAG_OV ^ FLAG_S) || FLAG_Z) { goto take_branch; } break;
+        case 0x8: if (!FLAG_OV) { goto take_branch; } break;
+        case 0x9: if (!FLAG_CY) { goto take_branch; } break;
+        case 0xA: if (!FLAG_Z) { goto take_branch; } break;
+        case 0xB: if (!(FLAG_CY || FLAG_Z)) { goto take_branch; } break;
+        case 0xC: if (!FLAG_S) { goto take_branch; } break;
+        case 0xD: if (false) { goto take_branch; } break;
+        case 0xE: if (!(FLAG_OV ^ FLAG_S)) { goto take_branch; } break;
+        case 0xF: if (((FLAG_OV ^ FLAG_S) || FLAG_Z)) { goto take_branch; } break;
+    }
+
+    /* no branch taken... */
+    VB_log("no jump with cond %u\n", f.cond);
+    return;
+
+take_branch:
+    VB_log("jump with cond %u\n", f.cond);
+    REG_PC += f.disp;
+    REG_PC = align_16(REG_PC);
 }
 
 
@@ -591,7 +624,7 @@ static void execute_16(struct VB_Core* vb) {
         case 0x26:
         case 0x27:
             VB_log("[CPU] COND-BRANCH - Format 3\n");
-            assert(0 && "instruction not implemented!");
+            BRANCH(vb, gen_format3(vb, opcode));
             break;
 
     // [JUMP]

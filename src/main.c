@@ -8,8 +8,7 @@
 
 static struct VB_Core CORE = {0};
 
-// all VB games are max 2MiB (as far as i can tell)
-static uint8_t ROM_DATA[0x200000];
+static uint8_t ROM_DATA[VB_MAX_ROM_SIZE];
 
 
 static bool read_file(const char* path, uint8_t* out_buf, size_t* out_size) {

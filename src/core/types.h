@@ -10,11 +10,6 @@ extern "C" {
 #include <stdint.h>
 
 
-enum { VB_ROM_HEADER_OFFSET_512kb = 0x07FDE0 };
-enum { VB_ROM_HEADER_OFFSET_1mb = 0x0FFDE0 };
-enum { VB_ROM_HEADER_OFFSET_2mb = 0x1FFDE0 };
-
-
 struct VB_RomHeader {
     char title[14];
     uint8_t reserved[4];
@@ -129,8 +124,13 @@ struct VB_Cpu {
     uint32_t ADTRE;     /* Address Trap Register */
 };
 
+struct VB_Vip {
+    uint8_t chars[0x800];
+};
+
 struct VB_Core {
     struct VB_Cpu cpu;
+    struct VB_Vip vip;
 
     // 64 KiB
     uint8_t wram[0x10000];

@@ -8,6 +8,10 @@ extern "C" {
 #include "core/types.h"
 
 
+/* 64 MiB */
+#define VB_MAX_ROM_SIZE 0x4000000
+
+
 void VB_init(struct VB_Core* vb);
 
 void VB_step(struct VB_Core* vb);
