@@ -7,12 +7,23 @@
 #define REGISTERS CPU.registers
 #define REG_PC CPU.PC
 
+// FLAGS
+#define FLAG_Z CPU.PSW.Z
+#define FLAG_S CPU.PSW.S
+#define FLAG_OV CPU.PSW.OV
+#define FLAG_CY CPU.PSW.CY
+
 
 // helpers that half / word align the address when reading
 #define READ8(addr) VB_bus_read_8(vb, (addr))
 #define READ16(addr) VB_bus_read_16(vb, (addr) & ~(0x1))
 #define READ32(addr) VB_bus_read_32(vb, (addr) & ~(0x3))
 
+
+static inline bool is_bit_set(const uint8_t bit, const uint32_t value) {
+    assert(bit < (sizeof(uint32_t) * 8) && "bit value out of bounds!");
+    return (value & (1U << bit)) > 0;
+}
 
 static inline uint32_t get_bit_range(const uint8_t start, const uint8_t end, const uint32_t value) {
     assert(end > start && "invalid bit range!");
@@ -32,6 +43,12 @@ static inline int32_t sign_extend(const uint8_t start_size, const uint32_t value
 /* this is generic as it may need to be used for other values. */
 static inline uint32_t align_16(const uint32_t v) { return v & ~(0x1); }
 static inline uint32_t align_32(const uint32_t v) { return v & ~(0x3); }
+
+
+/* helper for v-flag calcs, ONLY used for add / sub (mults are different!) */
+static inline bool calc_v_flag_add_sub(const uint32_t a, const uint32_t b, const uint32_t r) {
+    return (is_bit_set(31, a) == is_bit_set(31, b)) && (is_bit_set(31, a) != is_bit_set(31, r));
+}
 
 
 /* There are 6 unique formats for instruction encoding */
@@ -166,6 +183,47 @@ static inline void MOVHI(struct VB_Core* vb, struct Format5 f) {
     const uint32_t imm = f.imm << 16;
     REGISTERS[f.reg2] = REGISTERS[f.reg1] + imm;
 }
+
+
+// [Arithmetic]
+#define ADD(dst, va, vb) do { \
+    const uint32_t result = va + vb; \
+    \
+    /* update flags...*/ \
+    FLAG_Z = result == 0; \
+    FLAG_S = is_bit_set(31, result); \
+    FLAG_OV = calc_v_flag_add_sub(va, vb, result); \
+    FLAG_CY = (va + vb) > UINT32_MAX; \
+    \
+    dst = result; \
+} while(0)
+
+static inline void ADD_imm(struct VB_Core* vb, struct Format2 f) {
+    const int32_t imm = sign_extend(5, f.lo5);
+    ADD(
+        /* dst */ REGISTERS[f.reg2],
+        /* va */ REGISTERS[f.reg2],
+        /* vb */ imm
+    );
+}
+
+static inline void ADD_reg(struct VB_Core* vb, struct Format1 f) {
+    ADD(
+        /* dst */ REGISTERS[f.reg2],
+        /* va */ REGISTERS[f.reg2],
+        /* vb */ REGISTERS[f.reg1]
+    );
+}
+
+static inline void ADDI(struct VB_Core* vb, struct Format5 f) {
+    const int32_t imm = sign_extend(15, f.imm);
+    ADD(
+        /* dst */ REGISTERS[f.reg2],
+        /* va */ REGISTERS[f.reg1],
+        /* vb */ imm
+    );
+}
+
 
 // [Jump]
 static inline void JMP(struct VB_Core* vb, struct Format1 f) {
@@ -409,17 +467,17 @@ static void execute_16(struct VB_Core* vb) {
     // [Arithmetic]
         case 0x11:
             VB_log("[CPU] ADD - Format 2\n");
-            assert(0 && "instruction not implemented!");
+            ADD_imm(vb, gen_format2(vb, opcode));
             break;
 
         case 0x01:
             VB_log("[CPU] ADD - Format 1\n");
-            assert(0 && "instruction not implemented!");
+            ADD_reg(vb, gen_format1(vb, opcode));
             break;
 
         case 0x29:
             VB_log("[CPU] ADDI - Format 5\n");
-            assert(0 && "instruction not implemented!");
+            ADDI(vb, gen_format5(vb, opcode));
             break;
 
         case 0x13:
