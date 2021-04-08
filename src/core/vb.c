@@ -10,7 +10,7 @@ static void reset_cpu(struct VB_Cpu* cpu) {
     cpu->PC = 0xFFFFFFF0;
     cpu->ECR.FECC = 0x0000;
     cpu->ECR.EICC = 0xFFF0;
-    // cpu->PSW = 0x00008000;
+    cpu->PSW.NP = 1;
     cpu->PIR = 0x00005346;
     cpu->registers[ZERO_REGISTER] = 0x00000000;
 }

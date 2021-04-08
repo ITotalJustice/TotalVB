@@ -53,7 +53,11 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    VB_step(&CORE);
+#define STEP_COUNT 13
+
+    for (size_t i = 0; i < STEP_COUNT; ++i) {
+        VB_step(&CORE);
+    }
 
     return 0;
 }
