@@ -27,45 +27,50 @@ static inline int32_t sign_extend(const uint8_t start_size, const uint32_t value
     return ((int32_t)(value << bits)) >> bits;
 }
 
+
+/* used for aligning the PC after modifying it. */
+/* this is generic as it may need to be used for other values. */
 static inline uint32_t align_16(const uint32_t v) { return v & ~(0x1); }
 static inline uint32_t align_32(const uint32_t v) { return v & ~(0x3); }
 
 
+/* There are 6 unique formats for instruction encoding */
+/* 1-6 have been implemeted, format7 is basically identical to format1. */
 struct Format1 {
-    uint16_t opcode : 6;
-    uint16_t reg2 : 5;
-    uint16_t reg1 : 5;
+    uint8_t opcode; // 6-bits
+    uint8_t reg2;   // 5-bits
+    uint8_t reg1;   // 5-bits
 };
 
 struct Format2 {
-    uint16_t opcode : 6;
-    uint16_t reg2 : 5;
-    uint16_t lo5 : 5;
+    uint8_t opcode; // 6-bits
+    uint8_t reg2;   // 5-bits
+    uint8_t lo5;    // 5-bits
 };
 
 struct Format3 {
-    uint16_t opcode : 3;
-    uint16_t cond : 4;
-    int32_t disp; // TODO: this gets sign extended (16 or 32?)
+    uint8_t opcode; // 3-bits
+    uint8_t cond;   // 4-bits
+    int32_t disp;   // TODO: this gets sign extended (16 or 32?)
 };
 
 struct Format4 {
-    uint16_t opcode : 6;
-    int32_t disp;
+    uint8_t opcode; // 6-bits
+    int32_t disp;   // sign extended
 };
 
 struct Format5 {
-    uint16_t opcode : 6;
-    uint16_t reg2 : 5;
-    uint16_t reg1 : 5;
-    uint16_t imm; // fetched
+    uint8_t opcode; // 6-bits
+    uint8_t reg2;   // 5-bits
+    uint8_t reg1;   // 5-bits
+    uint16_t imm;   // fetched
 };
 
 struct Format6 {
-    uint16_t opcode : 6;
-    uint16_t reg2 : 5;
-    uint16_t reg1 : 5;
-    int32_t disp;
+    uint8_t opcode; // 6-bits
+    uint8_t reg2;   // 5-bits
+    uint8_t reg1;   // 5-bits
+    int32_t disp;   // sign extended
 };
 
 static inline struct Format1 gen_format1(struct VB_Core* vb, uint16_t op) {
@@ -142,6 +147,7 @@ static inline struct Format6 gen_format6(struct VB_Core* vb, uint16_t op) {
     return f;
 }
 
+
 // [Register Transfer]
 static inline void MOV_imm(struct VB_Core* vb, struct Format2 f) {
     REGISTERS[f.reg2] = sign_extend(15, f.lo5);
@@ -172,6 +178,7 @@ static inline void JR(struct VB_Core* vb, struct Format4 f) {
     REG_PC += f.disp;
     REG_PC = align_16(REG_PC);
 }
+
 
 static void sub_execute_float(struct VB_Core* vb, uint16_t opa) {
     const uint16_t opcode = READ16(REG_PC);
