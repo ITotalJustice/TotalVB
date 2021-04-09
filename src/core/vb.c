@@ -33,7 +33,7 @@ struct VB_RomHeader* VB_get_rom_header(const struct VB_Core* vb) {
 
 struct VB_RomHeader* VB_get_rom_header_from_data(const uint8_t* data, const size_t size) {
     // header should always start at the end of the rom area
-    return data + (size - 544);
+    return (struct VB_RomHeader*)(data + (size - 544));
 }
 
 void VB_get_rom_title(const struct VB_Core* vb, struct VB_RomTitle* title) {

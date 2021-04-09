@@ -44,6 +44,8 @@ cflags = [
     '-Wdouble-promotion',
     '-Wframe-larger-than=300KB',
 
+    '-Wno-unused',
+
     '-DVB_DEBUG',
 ]
 
