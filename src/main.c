@@ -52,9 +52,9 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-#define STEP_COUNT 13
+#define STEP_COUNT 8
 
-    for (size_t i = 0; i < STEP_COUNT; ++i) {
+    for (CORE.cpu.step_count = 0; CORE.cpu.step_count < STEP_COUNT; ++CORE.cpu.step_count) {
         VB_step(&CORE);
     }
 

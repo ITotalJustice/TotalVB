@@ -122,6 +122,10 @@ struct VB_Cpu {
     struct TKCW TKCW;   /* Task Control Word */
     uint32_t CHCW;      /* Cache Control Word */
     uint32_t ADTRE;     /* Address Trap Register */
+
+    uint16_t cycles;    /* Cycles elapsed after an instruction */
+
+    size_t step_count;  /* Debugging... */
 };
 
 struct VB_Vip {

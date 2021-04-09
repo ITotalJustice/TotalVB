@@ -1,6 +1,8 @@
 #include "core/vb.h"
 #include "core/internal.h"
 
+#include <assert.h>
+
 
 static inline uint8_t read_array8(const uint8_t* array, const uint32_t addr, const uint32_t mask) {
     return array[addr & mask];
