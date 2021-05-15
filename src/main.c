@@ -12,52 +12,52 @@ static uint8_t ROM_DATA[VB_MAX_ROM_SIZE];
 
 
 static bool read_file(const char* path, uint8_t* out_buf, size_t* out_size) {
-	FILE* f = fopen(path, "rb");
-	if (!f) {
-		return false;
-	}
+  FILE* f = fopen(path, "rb");
+  if (!f) {
+    return false;
+  }
 
-	fseek(f, 0, SEEK_END);
-	long size = ftell(f);
-	fseek(f, 0, SEEK_SET);
+  fseek(f, 0, SEEK_END);
+  long size = ftell(f);
+  fseek(f, 0, SEEK_SET);
 
-	if (size <= 0) {
-        fclose(f);
-		return false;
-	}
+  if (size <= 0) {
+    fclose(f);
+    return false;
+  }
 
-	fread(out_buf, 1, size, f);
-	*out_size = (size_t)size;
-	fclose(f);
+  fread(out_buf, 1, size, f);
+  *out_size = (size_t)size;
+  fclose(f);
 
-	return true;
+  return true;
 }
 
 int main(int argc, char** argv) {
-    if (argc < 2) {
-        printf("missing args\n");
-        return -1;
-    }
+  if (argc < 2) {
+    printf("missing args\n");
+    return -1;
+  }
 
-    vb_init(&CORE);
+  vb_init(&CORE);
 
-    size_t rom_size = 0;
+  size_t rom_size = 0;
 
-    if (!read_file(argv[1], ROM_DATA, &rom_size)) {
-        printf("failed to read file!\n");
-        return -1;
-    }
+  if (!read_file(argv[1], ROM_DATA, &rom_size)) {
+    printf("failed to read file!\n");
+    return -1;
+  }
 
-    if (!vb_loadrom(&CORE, ROM_DATA, rom_size)) {
-        printf("failed to load rom!\n");
-        return -1;
-    }
+  if (!vb_loadrom(&CORE, ROM_DATA, rom_size)) {
+    printf("failed to load rom!\n");
+    return -1;
+  }
 
 #define STEP_COUNT 8
 
-    for (CORE.cpu.step_count = 0; CORE.cpu.step_count < STEP_COUNT; ++CORE.cpu.step_count) {
-        vb_step(&CORE);
-    }
+  for (CORE.cpu.step_count = 0; CORE.cpu.step_count < STEP_COUNT; ++CORE.cpu.step_count) {
+    vb_step(&CORE);
+  }
 
-    return 0;
+  return 0;
 }
