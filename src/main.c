@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    VB_init(&CORE);
+    vb_init(&CORE);
 
     size_t rom_size = 0;
 
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    if (!VB_loadrom(&CORE, ROM_DATA, rom_size)) {
+    if (!vb_loadrom(&CORE, ROM_DATA, rom_size)) {
         printf("failed to load rom!\n");
         return -1;
     }
@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
 #define STEP_COUNT 8
 
     for (CORE.cpu.step_count = 0; CORE.cpu.step_count < STEP_COUNT; ++CORE.cpu.step_count) {
-        VB_step(&CORE);
+        vb_step(&CORE);
     }
 
     return 0;
