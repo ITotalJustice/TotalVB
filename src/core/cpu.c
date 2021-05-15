@@ -252,7 +252,6 @@ static inline void MOVHI(struct VB_Core* vb, struct Format5 f) {
 #define _ADD(dst, va, vb) do { \
   const uint32_t result = va + vb; \
   \
-  /* update flags...*/ \
   FLAG_Z = result == 0; \
   FLAG_S = is_bit_set(31, result); \
   FLAG_OV = calc_v_flag_add_sub(va, vb, result); \
@@ -290,7 +289,6 @@ static inline void ADDI(struct VB_Core* vb, struct Format5 f) {
 #define _SUB(dst, va, vb) do { \
   const uint32_t result = va - vb; \
   \
-  /* update flags...*/ \
   FLAG_Z = result == 0; \
   FLAG_S = is_bit_set(31, result); \
   FLAG_OV = calc_v_flag_add_sub(va, vb, result); \
@@ -318,33 +316,37 @@ static inline void CMP_reg(struct VB_Core* vb, struct Format1 f) {
 
 static inline void SUB_reg(struct VB_Core* vb, struct Format1 f) {
   _SUB(
-      /* dst */ REGISTERS[f.reg2],
-      /* va */ REGISTERS[f.reg2],
-      /* vb */ REGISTERS[f.reg1]
+    /* dst */ REGISTERS[f.reg2],
+    /* va */ REGISTERS[f.reg2],
+    /* vb */ REGISTERS[f.reg1]
   );
 }
 
 
 // [Conditional Branch]
 static inline void BRANCH(struct VB_Core* vb, struct Format3 f) {
+  #define GOTO_IF(c) if (c) { goto take_branch; } break;
+
   switch (f.cond) {
-    case 0x0: if (FLAG_OV) { goto take_branch; } break;
-    case 0x1: if (FLAG_CY) { goto take_branch; } break;
-    case 0x2: if (FLAG_Z) { goto take_branch; } break;
-    case 0x3: if (FLAG_CY || FLAG_Z) { goto take_branch; } break;
-    case 0x4: if (FLAG_S) { goto take_branch; } break;
-    case 0x5: if (true) { goto take_branch; } break;
-    case 0x6: if (FLAG_OV ^ FLAG_S) { goto take_branch; } break;
-    case 0x7: if ((FLAG_OV ^ FLAG_S) || FLAG_Z) { goto take_branch; } break;
-    case 0x8: if (!FLAG_OV) { goto take_branch; } break;
-    case 0x9: if (!FLAG_CY) { goto take_branch; } break;
-    case 0xA: if (!FLAG_Z) { goto take_branch; } break;
-    case 0xB: if (!(FLAG_CY || FLAG_Z)) { goto take_branch; } break;
-    case 0xC: if (!FLAG_S) { goto take_branch; } break;
-    case 0xD: if (false) { goto take_branch; } break;
-    case 0xE: if (!(FLAG_OV ^ FLAG_S)) { goto take_branch; } break;
-    case 0xF: if (((FLAG_OV ^ FLAG_S) || FLAG_Z)) { goto take_branch; } break;
+    case 0x0: GOTO_IF(FLAG_OV);
+    case 0x1: GOTO_IF(FLAG_CY);
+    case 0x2: GOTO_IF(FLAG_Z);
+    case 0x3: GOTO_IF(FLAG_CY || FLAG_Z);
+    case 0x4: GOTO_IF(FLAG_S);
+    case 0x5: GOTO_IF(true);
+    case 0x6: GOTO_IF(FLAG_OV ^ FLAG_S);
+    case 0x7: GOTO_IF((FLAG_OV ^ FLAG_S) || FLAG_Z);
+    case 0x8: GOTO_IF(!FLAG_OV);
+    case 0x9: GOTO_IF(!FLAG_CY);
+    case 0xA: GOTO_IF(!FLAG_Z);
+    case 0xB: GOTO_IF(!(FLAG_CY || FLAG_Z));
+    case 0xC: GOTO_IF(!FLAG_S);
+    case 0xD: GOTO_IF(false);
+    case 0xE: GOTO_IF(!(FLAG_OV ^ FLAG_S));
+    case 0xF: GOTO_IF(((FLAG_OV ^ FLAG_S) || FLAG_Z));
   }
+
+  #undef GOTO_IF
 
   /* no branch taken... */
   vb_log("no jump with cond %u\n", f.cond);
