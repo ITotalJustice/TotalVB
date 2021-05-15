@@ -22,7 +22,7 @@ uint8_t vb_bus_read_8(struct VB_Core* vb, uint32_t addr) {
   switch ((addr >> 24) & 0x7) {
     case 0x0: return vip_read_8(vb, addr);
     case 0x1: return vsu_read_8(vb, addr);
-    case 0x2: return misc_read_8(vb, addr);
+    case 0x2: return io_read(vb, addr);
     case 0x4: return game_exp_read_8(vb, addr);
     case 0x5: return wram_read_8(vb, addr);
     case 0x6: return game_ram_read_8(vb, addr);
@@ -35,7 +35,7 @@ uint16_t vb_bus_read_16(struct VB_Core* vb, uint32_t addr) {
   switch ((addr >> 24) & 0x7) {
     case 0x0: return vip_read_16(vb, addr);
     case 0x1: return vsu_read_16(vb, addr);
-    case 0x2: return misc_read_16(vb, addr);
+    case 0x2: return io_read(vb, addr);
     case 0x4: return game_exp_read_16(vb, addr);
     case 0x5: return wram_read_16(vb, addr);
     case 0x6: return game_ram_read_16(vb, addr);
@@ -48,7 +48,7 @@ uint32_t vb_bus_read_32(struct VB_Core* vb, uint32_t addr) {
   switch ((addr >> 24) & 0x7) {
     case 0x0: return vip_read_32(vb, addr);
     case 0x1: return vsu_read_32(vb, addr);
-    case 0x2: return misc_read_32(vb, addr);
+    case 0x2: return io_read(vb, addr);
     case 0x4: return game_exp_read_32(vb, addr);
     case 0x5: return wram_read_32(vb, addr);
     case 0x6: return game_ram_read_32(vb, addr);
@@ -62,7 +62,7 @@ void vb_bus_write_8(struct VB_Core* vb, uint32_t addr, uint8_t value) {
   switch ((addr >> 24) & 0x7) {
     case 0x0: vip_write_8(vb, addr, value); break;
     case 0x1: vsu_write_8(vb, addr, value); break;
-    case 0x2: misc_write_8(vb, addr, value); break;
+    case 0x2: io_write(vb, addr, value); break;
     case 0x4: game_exp_write_8(vb, addr, value); break;
     case 0x5: wram_write_8(vb, addr, value); break;
     case 0x6: game_ram_write_8(vb, addr, value); break;
@@ -74,7 +74,7 @@ void vb_bus_write_16(struct VB_Core* vb, uint32_t addr, uint16_t value) {
   switch ((addr >> 24) & 0x7) {
     case 0x0: vip_write_16(vb, addr, value); break;
     case 0x1: vsu_write_16(vb, addr, value); break;
-    case 0x2: misc_write_16(vb, addr, value); break;
+    case 0x2: io_write(vb, addr, value); break;
     case 0x4: game_exp_write_16(vb, addr, value); break;
     case 0x5: wram_write_16(vb, addr, value); break;
     case 0x6: game_ram_write_16(vb, addr, value); break;
@@ -86,7 +86,7 @@ void vb_bus_write_32(struct VB_Core* vb, uint32_t addr, uint32_t value) {
   switch ((addr >> 24) & 0x7) {
     case 0x0: vip_write_32(vb, addr, value); break;
     case 0x1: vsu_write_32(vb, addr, value); break;
-    case 0x2: misc_write_32(vb, addr, value); break;
+    case 0x2: io_write(vb, addr, value); break;
     case 0x4: game_exp_write_32(vb, addr, value); break;
     case 0x5: wram_write_32(vb, addr, value); break;
     case 0x6: game_ram_write_32(vb, addr, value); break;

@@ -1,5 +1,6 @@
 #include "../vb.h"
 #include "../internal.h"
+#include "bus.h"
 
 #include <assert.h>
 
@@ -75,24 +76,77 @@ uint32_t vsu_read_32(struct VB_Core* vb, uint32_t addr) {
 }
 
 
-uint8_t misc_read_8(struct VB_Core* vb, uint32_t addr) {
-  VB_UNUSED(vb); VB_UNUSED(addr);
+uint8_t io_read(struct VB_Core* vb, uint32_t addr) {
+  #define A(a) ((a >> 2) & 0xF)
 
-  assert(0 && "non impl read!");
-  return 0xFF;
-}
+  static const uint8_t rmasks[0xF] = {
+    [A(IO_CCR)]   = 0xFF,
+    [A(IO_CCSR)]  = 0xFF,
+    [A(IO_CDTR)]  = 0xFF,
+    [A(IO_CDRR)]  = 0xFF,
+    [A(IO_SDLR)]  = 0xFF,
+    [A(IO_SDHR)]  = 0xFF,
+    [A(IO_TLR)]   = 0xFF,
+    [A(IO_THR)]   = 0xFF,
+    [A(IO_TCR)]   = 0xFF,
+    [A(IO_WCR)]   = 0xFF,
+    [A(IO_SCR)]   = 0xFF,
+  };
 
-uint16_t misc_read_16(struct VB_Core* vb, uint32_t addr) {
-  VB_UNUSED(vb); VB_UNUSED(addr);
+  static const uint8_t omasks[0xF] = {
+    [A(IO_CCR)]   = 0x69, // 0b01101001
+    [A(IO_CCSR)]  = 0x60, // 0b01100000
+    [A(IO_CDTR)]  = 0x00,
+    [A(IO_CDRR)]  = 0x00,
+    [A(IO_SDLR)]  = 0x00,
+    [A(IO_SDHR)]  = 0x00,
+    [A(IO_TLR)]   = 0x00,
+    [A(IO_THR)]   = 0x00,
+    [A(IO_TCR)]   = 0xE0, // 0b11100000
+    [A(IO_WCR)]   = 0xFC, // 0b11111100
+    [A(IO_SCR)]   = 0x48, // 0b01001000
+  };
 
-  assert(0 && "non impl read!");
-  return 0xFF;
-}
+  const uint8_t mask = rmasks[A(addr)];
+  const uint8_t or_mask = omasks[A(addr)];
 
-uint32_t misc_read_32(struct VB_Core* vb, uint32_t addr) {
-  VB_UNUSED(vb); VB_UNUSED(addr);
+  switch (A(addr)) {
+    case A(IO_CCR): 
+      return (vb->io.CCR & mask) | or_mask;
+    
+    case A(IO_CCSR):
+      return (vb->io.CCSR & mask) | or_mask;
+    
+    case A(IO_CDTR):
+      return (vb->io.CDTR & mask) | or_mask;
+    
+    case A(IO_CDRR):
+      return (vb->io.CDRR & mask) | or_mask;
+    
+    case A(IO_SDLR):
+      return (vb->io.SDLR & mask) | or_mask;
+    
+    case A(IO_SDHR):
+      return (vb->io.SDHR & mask) | or_mask;
+    
+    case A(IO_TLR): 
+      return (vb->io.TLR & mask) | or_mask;
+    
+    case A(IO_THR): 
+      return (vb->io.THR & mask) | or_mask;
+    
+    case A(IO_TCR): 
+      return (vb->io.TCR & mask) | or_mask;
+    
+    case A(IO_WCR): 
+      return (vb->io.WCR & mask) | or_mask;
+    
+    case A(IO_SCR): 
+      return (vb->io.SCR & mask) | or_mask;
+  }
 
-  assert(0 && "non impl read!");
+  #undef A
+
   return 0xFF;
 }
 

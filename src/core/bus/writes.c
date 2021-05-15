@@ -1,5 +1,6 @@
 #include "../vb.h"
 #include "../internal.h"
+#include "bus.h"
 
 
 static inline void write_array8(
@@ -51,16 +52,56 @@ void vsu_write_32(struct VB_Core* vb, uint32_t addr, uint32_t value) {
 }
 
 
-void misc_write_8(struct VB_Core* vb, uint32_t addr, uint8_t value) {
-  VB_UNUSED(vb); VB_UNUSED(addr); VB_UNUSED(value);
-}
+void io_write(struct VB_Core* vb, uint32_t addr, uint8_t value) {
+  #define A(a) ((a >> 2) & 0xF)
 
-void misc_write_16(struct VB_Core* vb, uint32_t addr, uint16_t value) {
-  VB_UNUSED(vb); VB_UNUSED(addr); VB_UNUSED(value);
-}
+  switch (A(addr)) {
+    case A(IO_CCR): 
+      vb->io.CCR = value;
+      break;
+    
+    case A(IO_CCSR):
+      vb->io.CCSR = value;
+      break;
+    
+    case A(IO_CDTR):
+      vb->io.CDTR = value;
+      break;
+    
+    case A(IO_CDRR):
+      vb->io.CDRR = value;
+      break;
+    
+    case A(IO_SDLR):
+      vb->io.SDLR = value;
+      break;
+    
+    case A(IO_SDHR):
+      vb->io.SDHR = value;
+      break;
+    
+    case A(IO_TLR): 
+      vb->io.TLR = value;
+      break;
+    
+    case A(IO_THR): 
+      vb->io.THR = value;
+      break;
+    
+    case A(IO_TCR): 
+      vb->io.TCR = value;
+      break;
+    
+    case A(IO_WCR): 
+      vb->io.WCR = value;
+      break;
+    
+    case A(IO_SCR):
+      vb->io.SCR = value; 
+      break;
+  }
 
-void misc_write_32(struct VB_Core* vb, uint32_t addr, uint32_t value) {
-  VB_UNUSED(vb); VB_UNUSED(addr); VB_UNUSED(value);
+  #undef A
 }
 
 

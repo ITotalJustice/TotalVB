@@ -30,17 +30,17 @@ enum {
 // All IO ports are to be accessed as 8-bit values, but
 // are spaced 4-bytes apart each, allowing for any access.
 enum {
-  VB_IO_CCR   = 0x2000, // Link  Communication Control Register
-  VB_IO_CCSR  = 0x2004, // Link  COMCNT Control Register
-  VB_IO_CDTR  = 0x2008, // Link  Transmitted Data Register
-  VB_IO_CDRR  = 0x200C, // Link  Received Data Register
-  VB_IO_SDLR  = 0x2010, // Game Pad  Serial Data Low Register
-  VB_IO_SDHR  = 0x2014, // Game Pad  Serial Data High Register
-  VB_IO_TLR   = 0x2018, // Timer Timer Counter Low Register
-  VB_IO_THR   = 0x201C, // Timer Timer Counter High Register
-  VB_IO_TCR   = 0x2020, // Timer Timer Control Register
-  VB_IO_WCR   = 0x2024, // Game Pak  Wait Control Register
-  VB_IO_SCR   = 0x2028, // Game Pad  Serial Control Register
+  IO_CCR   = 0x2000, // Link  Communication Control Register
+  IO_CCSR  = 0x2004, // Link  COMCNT Control Register
+  IO_CDTR  = 0x2008, // Link  Transmitted Data Register
+  IO_CDRR  = 0x200C, // Link  Received Data Register
+  IO_SDLR  = 0x2010, // Game Pad  Serial Data Low Register
+  IO_SDHR  = 0x2014, // Game Pad  Serial Data High Register
+  IO_TLR   = 0x2018, // Timer Timer Counter Low Register
+  IO_THR   = 0x201C, // Timer Timer Counter High Register
+  IO_TCR   = 0x2020, // Timer Timer Control Register
+  IO_WCR   = 0x2024, // Game Pak  Wait Control Register
+  IO_SCR   = 0x2028, // Game Pad  Serial Control Register
   // 0x2040 - 0x2FFF Mirroring of hardware component memory map
 };
 
@@ -54,9 +54,7 @@ uint8_t vsu_read_8(struct VB_Core* vb, uint32_t addr);
 uint16_t vsu_read_16(struct VB_Core* vb, uint32_t addr);
 uint32_t vsu_read_32(struct VB_Core* vb, uint32_t addr);
 
-uint8_t misc_read_8(struct VB_Core* vb, uint32_t addr);
-uint16_t misc_read_16(struct VB_Core* vb, uint32_t addr);
-uint32_t misc_read_32(struct VB_Core* vb, uint32_t addr);
+uint8_t io_read(struct VB_Core* vb, uint32_t addr);
 
 uint8_t game_exp_read_8(struct VB_Core* vb, uint32_t addr);
 uint16_t game_exp_read_16(struct VB_Core* vb, uint32_t addr);
@@ -84,9 +82,7 @@ void vsu_write_8(struct VB_Core* vb, uint32_t addr, uint8_t value);
 void vsu_write_16(struct VB_Core* vb, uint32_t addr, uint16_t value);
 void vsu_write_32(struct VB_Core* vb, uint32_t addr, uint32_t value);
 
-void misc_write_8(struct VB_Core* vb, uint32_t addr, uint8_t value);
-void misc_write_16(struct VB_Core* vb, uint32_t addr, uint16_t value);
-void misc_write_32(struct VB_Core* vb, uint32_t addr, uint32_t value);
+void io_write(struct VB_Core* vb, uint32_t addr, uint8_t value);
 
 void game_exp_write_8(struct VB_Core* vb, uint32_t addr, uint8_t value);
 void game_exp_write_16(struct VB_Core* vb, uint32_t addr, uint16_t value);

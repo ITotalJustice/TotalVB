@@ -132,9 +132,28 @@ struct VB_Vip {
   uint8_t chars[0x800];
 };
 
+struct VB_IO {
+  // [LINK]
+  uint8_t CCR;  // Communication Control Register
+  uint8_t CCSR; // COMCNT Control Register
+  uint8_t CDTR; // Transmitted Data Register
+  uint8_t CDRR; // Received Data Register
+  // [PAD]
+  uint8_t SDLR; // Serial Data Low Register
+  uint8_t SDHR; // Serial Data High Register
+  // [TIMER]
+  uint8_t TLR;  // Timer Counter Low Register
+  uint8_t THR;  // Timer Counter High Register
+  uint8_t TCR;  // Timer Control Register
+  // [PAK]
+  uint8_t WCR;  // Wait Control Register
+  uint8_t SCR;  // Serial Control Register
+};
+
 struct VB_Core {
   struct VB_Cpu cpu;
   struct VB_Vip vip;
+  struct VB_IO io;
 
   // 64 KiB
   uint8_t wram[0x10000];
