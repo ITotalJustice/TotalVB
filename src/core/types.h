@@ -72,37 +72,37 @@ enum VB_RegisterType {
 // in case those 2-bits are non-zero, they are forced when data is accessed
 
 struct PSW {
-  uint32_t I : 4;   /* Interrupt Level */
-  uint32_t NP : 1;  /* NMI Pending */
-  uint32_t EP : 1;  /* Exception Pending */
-  uint32_t AE : 1;  /* Address Trap Enable */
-  uint32_t ID : 1;  /* Interrupt Disable */
-  uint32_t FRO : 1; /* Floating Reserved Operand */
-  uint32_t FIV : 1; /* Floating Invalid */
-  uint32_t FZD : 1; /* Floating Zero Divide */
-  uint32_t FOV : 1; /* Floating Overflow */
-  uint32_t FUD : 1; /* Floating Underflow */
-  uint32_t FPR : 1; /* Floating Precision */
-  uint32_t CY : 1;  /* Carry */
-  uint32_t OV : 1;  /* Overflow */
-  uint32_t S : 1;   /* Sign */
-  uint32_t Z : 1;   /* Zero */
+  uint8_t I;  /* Interrupt Level */
+  bool NP;    /* NMI Pending */
+  bool EP;    /* Exception Pending */
+  bool AE;    /* Address Trap Enable */
+  bool ID;    /* Interrupt Disable */
+  bool FRO;   /* Floating Reserved Operand */
+  bool FIV;   /* Floating Invalid */
+  bool FZD;   /* Floating Zero Divide */
+  bool FOV;   /* Floating Overflow */
+  bool FUD;   /* Floating Underflow */
+  bool FPR;   /* Floating Precision */
+  bool CY;    /* Carry */
+  bool OV;    /* Overflow */
+  bool S;     /* Sign */
+  bool Z;     /* Zero */
 };
 
 struct TKCW {
-  uint32_t OTM : 1; /* Operand Trap Mask */
-  uint32_t FIT : 1; /* Floating Invalid Operation Trap Enable */
-  uint32_t FZT : 1; /* Floating-Zero Divide Trap Enable */
-  uint32_t FVT : 1; /* Floating-Overflow Trap Enable */
-  uint32_t FUT : 1; /* Floating-Underflow Trap Enable */
-  uint32_t FPI : 1; /* Floating-Precision Trap Enable */
-  uint32_t RDI : 1; /* Floating Rounding Control Bit for Integer Conversion */
-  uint32_t RD : 2;  /* Floating Rounding Control */
+  bool OTM;   /* Operand Trap Mask */
+  bool FIT;   /* Floating Invalid Operation Trap Enable */
+  bool FZT;   /* Floating-Zero Divide Trap Enable */
+  bool FVT;   /* Floating-Overflow Trap Enable */
+  bool FUT;   /* Floating-Underflow Trap Enable */
+  bool FPI;   /* Floating-Precision Trap Enable */
+  bool RDI;   /* Floating Rounding Control Bit for Integer Conversion */
+  uint8_t RD; /* Floating Rounding Control */
 };
 
 struct ECR {
-    uint16_t FECC;  /* Fatal Error Cause Code */
-    uint16_t EICC;  /* Exception/Interrupt Cause Code */
+  uint16_t FECC;  /* Fatal Error Cause Code */
+  uint16_t EICC;  /* Exception/Interrupt Cause Code */
 };
 
 struct VB_Cpu {
