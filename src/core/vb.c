@@ -1,5 +1,5 @@
-#include "core/vb.h"
-#include "core/internal.h"
+#include "vb.h"
+#include "internal.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -27,13 +27,13 @@ static inline bool is_pow2(size_t size) {
     return (!(size & (size - 1)) && size);
 }
 
-struct VB_RomHeader* VB_get_rom_header(const struct VB_Core* vb) {
+const struct VB_RomHeader* VB_get_rom_header(const struct VB_Core* vb) {
     return VB_get_rom_header_from_data(vb->rom, vb->rom_size);
 }
 
-struct VB_RomHeader* VB_get_rom_header_from_data(const uint8_t* data, const size_t size) {
+const struct VB_RomHeader* VB_get_rom_header_from_data(const uint8_t* data, const size_t size) {
     // header should always start at the end of the rom area
-    return (struct VB_RomHeader*)(data + (size - 544));
+    return (const struct VB_RomHeader*)(data + (size - 544));
 }
 
 void VB_get_rom_title(const struct VB_Core* vb, struct VB_RomTitle* title) {

@@ -1,6 +1,6 @@
-#include "core/vb.h"
-#include "core/internal.h"
-#include "core/bus/bus.h"
+#include "../vb.h"
+#include "../internal.h"
+#include "bus.h"
 
 #include <assert.h>
 

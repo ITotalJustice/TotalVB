@@ -55,6 +55,7 @@ dkms.conf
 .vscode
 build
 roms/
+run.sh
 
 # msvc
 TotalVB/.vs

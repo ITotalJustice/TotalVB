@@ -5,7 +5,7 @@ extern "C" {
 #endif
 
 
-#include "core/types.h"
+#include "types.h"
 
 
 // used mainly in debugging when i want to quickly silence

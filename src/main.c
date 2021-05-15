@@ -22,6 +22,7 @@ static bool read_file(const char* path, uint8_t* out_buf, size_t* out_size) {
 	fseek(f, 0, SEEK_SET);
 
 	if (size <= 0) {
+        fclose(f);
 		return false;
 	}
 

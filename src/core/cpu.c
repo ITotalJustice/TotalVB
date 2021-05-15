@@ -1,5 +1,5 @@
-#include "core/vb.h"
-#include "core/internal.h"
+#include "vb.h"
+#include "internal.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -96,31 +96,43 @@ struct Format6 {
 
 // [DEBUG]
 static void log_format1(const struct VB_Core* vb, const struct Format1 f) {
+    VB_UNUSED(vb);
+
     VB_log("OPCODE: 0x%02X\treg2-idx: %u\treg2: 0x%08X\treg1-idx: %u\treg1: 0x%08X\n\n",
         f.opcode, f.reg2, REGISTERS[f.reg2], f.reg1, REGISTERS[f.reg1]);
 }
 
 static void log_format2(const struct VB_Core* vb, const struct Format2 f) {
+    VB_UNUSED(vb);
+
     VB_log("OPCODE: 0x%02X\treg2-idx: %u\treg2: 0x%08X\tlo5: %u\n\n",
         f.opcode, f.reg2, REGISTERS[f.reg2], f.lo5);
 }
 
 static void log_format3(const struct VB_Core* vb, const struct Format3 f) {
+    VB_UNUSED(vb);
+
     VB_log("OPCODE: 0x%02X\tcond: 0x%X\tdisp: %d\n\n",
         f.opcode, f.cond, f.disp);
 }
 
 static void log_format4(const struct VB_Core* vb, const struct Format4 f) {
+    VB_UNUSED(vb);
+
     VB_log("OPCODE: 0x%02X\tdisp: %d\n\n",
         f.opcode, f.disp);
 }
 
 static void log_format5(const struct VB_Core* vb, const struct Format5 f) {
+    VB_UNUSED(vb);
+
     VB_log("OPCODE: 0x%02X\treg2-idx: %u\treg2: 0x%08X\treg1-idx: %u\treg1: 0x%08X; imm: 0x%X\n\n",
         f.opcode, f.reg2, REGISTERS[f.reg2], f.reg1, REGISTERS[f.reg1], f.imm);
 }
 
 static void log_format6(const struct VB_Core* vb, const struct Format6 f) {
+    VB_UNUSED(vb);
+
     VB_log("OPCODE: 0x%02X\treg2-idx: %u\treg2: 0x%08X\treg1-idx: %u\treg1: 0x%08X\tdisp: %d\n\n",
         f.opcode, f.reg2, REGISTERS[f.reg2], f.reg1, REGISTERS[f.reg1], f.disp);
 }
@@ -223,7 +235,7 @@ static inline void MOVEA(struct VB_Core* vb, struct Format5 f) {
 }
 
 static inline void MOVHI(struct VB_Core* vb, struct Format5 f) {
-    const uint32_t imm = f.imm << 16;
+    const uint32_t imm = (uint32_t)f.imm << 16;
     REGISTERS[f.reg2] = REGISTERS[f.reg1] + imm;
 }
 
@@ -364,138 +376,142 @@ static inline void JR(struct VB_Core* vb, struct Format4 f) {
 
 
 static void sub_execute_float(struct VB_Core* vb, uint16_t opa) {
+    VB_UNUSED(opa);
+
     const uint16_t opcode = READ16(REG_PC);
     REG_PC += 2;
 
     switch ((opcode >> 10) & 0x3F) {
     // [Floating-Point]
         case 0x04:
-            VB_log("[CPU] ADDF.S\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ADDF.S\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x00:
-            VB_log("[CPU] CMPF.S\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] CMPF.S\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x03:
-            VB_log("[CPU] CVT.SW\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] CVT.SW\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x02:
-            VB_log("[CPU] CVT.WS\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] CVT.WS\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x07:
-            VB_log("[CPU] DIVF.S\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] DIVF.S\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x06:
-            VB_log("[CPU] MULF.S\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] MULF.S\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x05:
-            VB_log("[CPU] SUBF.S\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SUBF.S\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0B:
-            VB_log("[CPU] TRNC.S\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] TRNC.S\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
     // [Nintendo Extended]
         case 0x0C:
-            VB_log("[CPU] MPYHW\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] MPYHW\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0A:
-            VB_log("[CPU] REV\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] REV\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x08:
-            VB_log("[CPU] XB\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] XB\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x09:
-            VB_log("[CPU] XH\tFormat 7\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] XH\tFormat 7\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
     }
 }
 
 static void sub_execute_bit_strings(struct VB_Core* vb, uint16_t opa) {
+    VB_UNUSED(opa);
+
     const uint16_t opcode = READ16(REG_PC);
     REG_PC += 2;
 
     switch ((opcode >> 11) & 0x1F) {
     // [Bitwise]
         case 0x09:
-            VB_log("[CPU] ANDBSU\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ANDBSU\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0D:
-            VB_log("[CPU] ANDNBSU\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ANDNBSU\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0B:
-            VB_log("[CPU] MOVBSU\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] MOVBSU\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x1F:
-            VB_log("[CPU] NOTBSU\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] NOTBSU\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x08:
-            VB_log("[CPU] ORBSU\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ORBSU\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0C:
-            VB_log("[CPU] ORNBSU\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ORNBSU\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0A:
-            VB_log("[CPU] XORBSU\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] XORBSU\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0E:
-            VB_log("[CPU] XORNBSU\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] XORNBSU\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
     // [Search]
         case 0x01:
-            VB_log("[CPU] SCH0BSD\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SCH0BSD\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x00:
-            VB_log("[CPU] SCH0BSU\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SCH0BSU\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x03:
-            VB_log("[CPU] SCH1BSD\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SCH1BSD\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x02:
-            VB_log("[CPU] SCH1BSU\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SCH1BSU\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
     }
@@ -508,202 +524,202 @@ static void execute_16(struct VB_Core* vb) {
     switch ((opcode >> 10) & 0x3F) {
     // [Register Transfer]
         case 0x10:
-            VB_log("[CPU] MOV\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] MOV\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             MOV_imm(vb, gen_format2(vb, opcode));
             break;
 
         case 0x00:
-            VB_log("[CPU] MOV\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] MOV\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             MOV_reg(vb, gen_format1(vb, opcode));
             break;
 
         case 0x28:
-            VB_log("[CPU] MOVEA\tFormat 5\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] MOVEA\tFormat 5\tCOUNT [%zu]\n", vb->cpu.step_count);
             MOVEA(vb, gen_format5(vb, opcode));
             break;
 
         case 0x2F:
-            VB_log("[CPU] MOVHI\tFormat 5\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] MOVHI\tFormat 5\tCOUNT [%zu]\n", vb->cpu.step_count);
             MOVHI(vb, gen_format5(vb, opcode));
             break;
 
     // [Load and Input]
         case 0x38:
-            VB_log("[CPU] IN.B\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] IN.B\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x39:
-            VB_log("[CPU] IN.H\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] IN.H\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x3B:
-            VB_log("[CPU] IN.W\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] IN.W\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x30:
-            VB_log("[CPU] LD.B\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
-            printf("count %llu\n", vb->cpu.step_count);
+            VB_log("[CPU] LD.B\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
+            printf("count %zu\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x31:
-            VB_log("[CPU] LD.H\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] LD.H\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x33:
-            VB_log("[CPU] LD.W\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] LD.W\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
     // [Store and Output]
         case 0x3C:
-            VB_log("[CPU] OUT.B\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] OUT.B\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x3D:
-            VB_log("[CPU] OUT.H\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] OUT.H\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x3F:
-            VB_log("[CPU] OUT.W\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] OUT.W\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x34:
-            VB_log("[CPU] ST.B\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ST.B\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x35:
-            VB_log("[CPU] ST.H\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ST.H\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x37:
-            VB_log("[CPU] ST.W\tFormat 6\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ST.W\tFormat 6\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
     // [Arithmetic]
         case 0x11:
-            VB_log("[CPU] ADD\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ADD\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             ADD_imm(vb, gen_format2(vb, opcode));
             break;
 
         case 0x01:
-            VB_log("[CPU] ADD\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ADD\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             ADD_reg(vb, gen_format1(vb, opcode));
             break;
 
         case 0x29:
-            VB_log("[CPU] ADDI\tFormat 5\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ADDI\tFormat 5\tCOUNT [%zu]\n", vb->cpu.step_count);
             ADDI(vb, gen_format5(vb, opcode));
             break;
 
         case 0x13:
-            VB_log("[CPU] CMP\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] CMP\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             CMP_imm(vb, gen_format2(vb, opcode));
             break;
 
         case 0x03:
-            VB_log("[CPU] CMP\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] CMP\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             CMP_reg(vb, gen_format1(vb, opcode));
             break;
 
         case 0x09:
-            VB_log("[CPU] DIV\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] DIV\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0B:
-            VB_log("[CPU] DIVU\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] DIVU\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x08:
-            VB_log("[CPU] MUL\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] MUL\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0A:
-            VB_log("[CPU] MULU\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] MULU\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x02:
-            VB_log("[CPU] SUB\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SUB\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             SUB_reg(vb, gen_format1(vb, opcode));
             break;
 
     // [Bitwise]
         case 0x0D:
-            VB_log("[CPU] AND\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] AND\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x2D:
-            VB_log("[CPU] ANDI\tFormat 5\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ANDI\tFormat 5\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0F:
-            VB_log("[CPU] NOT\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] NOT\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0C:
-            VB_log("[CPU] OR\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] OR\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x2C:
-            VB_log("[CPU] ORI\tFormat 5\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] ORI\tFormat 5\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x17:
-            VB_log("[CPU] SAR\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SAR\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x07:
-            VB_log("[CPU] SAR\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SAR\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x14:
-            VB_log("[CPU] SHL\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SHL\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x04:
-            VB_log("[CPU] SHL\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SHL\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x15:
-            VB_log("[CPU] SHR\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SHR\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x05:
-            VB_log("[CPU] SHR\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SHR\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x0E:
-            VB_log("[CPU] XOR\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] XOR\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x2E:
-            VB_log("[CPU] XORI\tFormat 5\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] XORI\tFormat 5\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
@@ -716,50 +732,50 @@ static void execute_16(struct VB_Core* vb) {
         case 0x25:
         case 0x26:
         case 0x27:
-            VB_log("[CPU] COND-BRANCH\tFormat 3\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] COND-BRANCH\tFormat 3\tCOUNT [%zu]\n", vb->cpu.step_count);
             BRANCH(vb, gen_format3(vb, opcode));
             break;
 
     // [JUMP]
         case 0x2B:
-            VB_log("[CPU] JAL\tFormat 4\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] JAL\tFormat 4\tCOUNT [%zu]\n", vb->cpu.step_count);
             JAL(vb, gen_format4(vb, opcode));
             break;
 
         case 0x06:
-            VB_log("[CPU] JMP\tFormat 1\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] JMP\tFormat 1\tCOUNT [%zu]\n", vb->cpu.step_count);
             JMP(vb, gen_format1(vb, opcode));
             break;
 
         case 0x2A:
-            VB_log("[CPU] JR\tFormat 4\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] JR\tFormat 4\tCOUNT [%zu]\n", vb->cpu.step_count);
             JR(vb, gen_format4(vb, opcode));
             break;
 
     // [CPU Control]
         case 0x1A:
-            VB_log("[CPU] HALT\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] HALT\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x1C:
-            VB_log("[CPU] LDSR\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
-            printf("count %llu\n", vb->cpu.step_count);
+            VB_log("[CPU] LDSR\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
+            printf("count %zu\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x19:
-            VB_log("[CPU] RETI\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] RETI\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x1D:
-            VB_log("[CPU] STSR\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] STSR\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x18:
-            VB_log("[CPU] TRAP\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] TRAP\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
@@ -775,24 +791,24 @@ static void execute_16(struct VB_Core* vb) {
 
     // [CAXI]
         case 0x3A:
-            VB_log("[CPU] CAXI\tFormat 4\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] CAXI\tFormat 4\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
     // [SETF]
         case 0x12:
-            VB_log("[CPU] SETF\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SETF\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
     // [Nintendo - Standalone]
         case 0x16:
-            VB_log("[CPU] CLI\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] CLI\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 
         case 0x1E:
-            VB_log("[CPU] SEI\tFormat 2\tCOUNT [%llu]\n", vb->cpu.step_count);
+            VB_log("[CPU] SEI\tFormat 2\tCOUNT [%zu]\n", vb->cpu.step_count);
             assert(0 && "instruction not implemented!");
             break;
 

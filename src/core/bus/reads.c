@@ -1,5 +1,5 @@
-#include "core/vb.h"
-#include "core/internal.h"
+#include "../vb.h"
+#include "../internal.h"
 
 #include <assert.h>
 
@@ -26,64 +26,88 @@ static inline uint32_t read_array32(const uint8_t* array, const uint32_t addr, c
 
 
 uint8_t VB_vip_read_8(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 uint16_t VB_vip_read_16(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 uint32_t VB_vip_read_32(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 
 uint8_t VB_vsu_read_8(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 uint16_t VB_vsu_read_16(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 uint32_t VB_vsu_read_32(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 
 uint8_t VB_misc_read_8(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 uint16_t VB_misc_read_16(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 uint32_t VB_misc_read_32(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 
 uint8_t VB_game_exp_read_8(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 uint16_t VB_game_exp_read_16(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 uint32_t VB_game_exp_read_32(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
@@ -103,16 +127,22 @@ uint32_t VB_wram_read_32(struct VB_Core* vb, uint32_t addr) {
 
 
 uint8_t VB_game_ram_read_8(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 uint16_t VB_game_ram_read_16(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }
 
 uint32_t VB_game_ram_read_32(struct VB_Core* vb, uint32_t addr) {
+    VB_UNUSED(vb); VB_UNUSED(addr);
+
     assert(0 && "non impl read!");
     return 0xFF;
 }

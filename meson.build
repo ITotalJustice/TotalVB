@@ -1,76 +1,101 @@
-project('TotalVB', ['c', 'cpp'],
-    version: '0.0.1',
-    default_options: [
-        'buildtype=debug',
-    ],
+project('TotalVB', ['c'],
+  version : '0.0.1',
+  license : 'MIT',
+  default_options : [
+    'warning_level=3',
+    'optimization=3',
+    'strip=true',
+    'c_std=c99',
+  ]
 )
 
 dependencies = [
-    # dependency('sdl2', version : '>=2.0.5'),
 ]
 
 source = files([
-    # core
-    'src/core/vb.c',
-    'src/core/cpu.c',
-    'src/core/bus/bus.c',
-    'src/core/bus/reads.c',
-    'src/core/bus/writes.c',
+  # core
+  'src/core/vb.c',
+  'src/core/cpu.c',
+  'src/core/bus/bus.c',
+  'src/core/bus/reads.c',
+  'src/core/bus/writes.c',
 
 
-    # used for testing
-    'src/main.c',
+  # used for testing
+  'src/main.c',
 ])
 
 includes = include_directories([
-    'src',
+  'src',
 ])
 
-cflags = [
-    # optimise
-    # '-Ofast',
-    # '-flto',
-    # '-DNDEBUG',
-
-    # warns
-    '-Wall',
-    '-Wextra',
-    '-Wpedantic',
-    '-Wswitch-enum',
-    '-Wduplicated-branches',
-    '-Wduplicated-cond',
-    '-Wshadow',
-    '-Wfatal-errors',
-    '-Wdouble-promotion',
-    '-Wframe-larger-than=300KB',
-
-    '-Wno-unused',
-
-    '-DVB_DEBUG',
+c_flags = [
+  '-DVB_DEBUG',
 ]
 
-cppflags = [
-    '-std=gnu++17',
-    '-Wuseless-cast',
-    '-fdevirtualize-at-ltrans',
-    '-Wsuggest-final-types',
+c_warnings = [
+  '-Wall',
+  '-Wextra',
+  '-Werror',
+  '-Wfatal-errors',
+  '-Wpedantic',
+  '-Wshadow',
+  '-Wdouble-promotion',
+  '-Wformat=2',
+  '-Wformat-overflow=2',
+  '-Wformat-truncation=1',
+  '-Wundef',
+  '-Wmissing-include-dirs',
+  '-Wstrict-aliasing=2',
+  '-Walloca',
+  '-Wduplicated-branches',
+  '-Wduplicated-cond',
+  '-Wwrite-strings',
+  '-Wdate-time',
+  '-Wsizeof-pointer-memaccess',
+  '-Wlogical-op',
+  '-Wpacked',
+  '-Wredundant-decls',
+  '-Wnested-externs',
+  '-Winline',
+  '-Wcast-qual',
+  '-Wcast-align',
+  '-Wpointer-arith',
+  '-Winit-self',
+  '-Wswitch-enum',
+  '-Wstrict-prototypes',
+  #'-Wmissing-prototypes',
+  '-Wredundant-decls',
+  '-Wfloat-equal',
+  '-Wvla',
+  #'-Wc++-compat',
+  #'-Wconversion',
+
+  '-fsanitize=address',
+  '-fsanitize=leak',
+  '-fsanitize=undefined',
+  '-fsanitize=pointer-compare',
+  '-fsanitize=pointer-subtract',
+  '-fstack-protector-all',
 ]
 
 linkflags = [
-    # '-Wl,-subsystem,windows',
-    # '-s',
+  '-fsanitize=address',
+  '-fsanitize=leak',
+  '-fsanitize=undefined',
+  '-fsanitize=pointer-compare',
+  '-fsanitize=pointer-subtract',
+  '-fstack-protector-all',
 ]
 
-# subdir('res')
-
-executable(
-    'TotalVB',
-    # res, # set the icon
-    [ source ],
-    dependencies : [ dependencies ] ,
-    install: false,
-    include_directories: [ includes ],
-    c_args: [ cflags ],
-    cpp_args: [ cppflags, cflags ],
-    link_args: [ linkflags ]
+exe = executable(
+  'TotalVB',
+  [ source ],
+  install: false,
+  c_args: [ c_warnings, c_flags ],
+  link_args: [ linkflags ],
 )
+
+# scripts
+run_target('cppcheck',
+  command : 'scripts/cppcheck.sh')
