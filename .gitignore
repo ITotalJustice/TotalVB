@@ -53,7 +53,8 @@ dkms.conf
 
 # my ignore
 .vscode
-build
+build/
+builddir/
 roms/
 run.sh
 
@@ -66,3 +67,9 @@ TotalVB/packages/
 TotalVB/TotalVB/Debug
 TotalVB/TotalVB/Release
 TotalVB/TotalVB/x64
+
+.cache
+compile_commands.json
+docs/
+*.vb
+*.zip

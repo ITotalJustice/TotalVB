@@ -9,22 +9,17 @@
 extern "C" {
 #endif
 
-
-#include "types.h"
+#include <assert.h>
 
 
 // static assert is part of c++11 and c11 (defined in assert.h)
 // this is my own static_assert, just in case we are c99 bound
 #if (defined(__cplusplus) && __cplusplus < 201103L) || (!defined(static_assert))
-  #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
-    #define static_assert _Static_assert
-  #else
-    #define static_assert(expr, msg) typedef char static_assertion[(expr) ? 1 : -1]
-  #endif
+  #define static_assert(expr, msg) typedef char static_assertion[(expr) ? 1 : -1]
 #endif
 
 
-#if defined(__has_builtin)
+#if defined __has_builtin
   #define HAS_BUILTIN(x) __has_builtin(x)
 #else
   #if defined(__GNUC__)
@@ -91,40 +86,6 @@ extern "C" {
   #define vb_log_err(...)
   #define vb_log_fatal(...)
 #endif // VB_DEBUG
-
-
-void vb_v810_reset(struct VB_Core* vb);
-void vb_vip_reset(struct VB_Core* vb);
-void vb_vsu_reset(struct VB_Core* vb);
-void vb_timer_reset(struct VB_Core* vb);
-
-void vb_v810_run(struct VB_Core* vb);
-void vb_vip_run(struct VB_Core* vb, uint8_t cycles);
-void vb_vsu_run(struct VB_Core* vb, uint8_t cycles);
-void vb_timer_run(struct VB_Core* vb, uint8_t cycles);
-
-
-uint8_t vb_bus_read_8(struct VB_Core* vb, uint32_t addr);
-uint16_t vb_bus_read_16(struct VB_Core* vb, uint32_t addr);
-uint32_t vb_bus_read_32(struct VB_Core* vb, uint32_t addr);
-
-void vb_bus_write_8(struct VB_Core* vb, uint32_t addr, uint8_t value);
-void vb_bus_write_16(struct VB_Core* vb, uint32_t addr, uint16_t value);
-void vb_bus_write_32(struct VB_Core* vb, uint32_t addr, uint32_t value);
-
-
-void vip_write_8(struct VB_Core* vb, uint32_t addr, uint8_t value);
-void vip_write_16(struct VB_Core* vb, uint32_t addr, uint16_t value);
-
-uint8_t vip_read_8(struct VB_Core* vb, uint32_t addr);
-uint16_t vip_read_16(struct VB_Core* vb, uint32_t addr);
-
-
-uint8_t vsu_read_8(struct VB_Core* vb, uint32_t addr);
-uint16_t vsu_read_16(struct VB_Core* vb, uint32_t addr);
-
-void vsu_write_8(struct VB_Core* vb, uint32_t addr, uint8_t value);
-void vsu_write_16(struct VB_Core* vb, uint32_t addr, uint16_t value);
 
 
 #ifdef __cplusplus

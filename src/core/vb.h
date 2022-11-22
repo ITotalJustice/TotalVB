@@ -1,3 +1,8 @@
+/**
+ * Copyright 2022 TotalJustice.
+ * SPDX-License-Identifier: MIT
+ */
+
 #pragma once
 
 #ifdef __cplusplus
@@ -8,17 +13,20 @@ extern "C" {
 #include "types.h"
 
 
-/* 64 MiB */
-#define VB_MAX_ROM_SIZE 0x4000000
-
-
 void vb_init(struct VB_Core* vb);
-
+void vb_reset(struct VB_Core* vb);
 void vb_step(struct VB_Core* vb);
 
-// struct VB_RomHeader
 bool vb_loadrom(
   struct VB_Core* vb, const uint8_t* data, size_t size
+);
+
+bool vb_savestate(
+  struct VB_Core* vb, struct VB_State* state
+);
+
+bool vb_loadstate(
+  struct VB_Core* vb, const struct VB_State* state
 );
 
 const struct VB_RomHeader* vb_get_rom_header(

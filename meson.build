@@ -3,9 +3,9 @@ project('TotalVB', ['c'],
   license : 'MIT',
   default_options : [
     'warning_level=3',
-    'optimization=3',
-    'strip=true',
-    'c_std=c99',
+    # 'optimization=3', # doesn't seem to do anything
+    # 'strip=true',
+    'c_std=c11',
   ]
 )
 
@@ -15,10 +15,11 @@ dependencies = [
 source = files([
   # core
   'src/core/vb.c',
-  'src/core/cpu.c',
-  'src/core/bus/bus.c',
-  'src/core/bus/reads.c',
-  'src/core/bus/writes.c',
+  'src/core/v810.c',
+  'src/core/vip.c',
+  'src/core/vsu.c',
+  'src/core/timer.c',
+  'src/core/mem.c',
 
 
   # used for testing
@@ -31,14 +32,18 @@ includes = include_directories([
 
 c_flags = [
   '-DVB_DEBUG',
+  '-O2',
+  '-std=c11'
+  # '--param', 'max-inline-insns-single=1000',
+  # '--param', 'large-function-growth=100',
 ]
 
 c_warnings = [
   '-Wall',
   '-Wextra',
-  '-Werror',
+  # '-Werror',
   '-Wfatal-errors',
-  '-Wpedantic',
+  # '-Wpedantic',
   '-Wshadow',
   '-Wdouble-promotion',
   '-Wformat=2',
